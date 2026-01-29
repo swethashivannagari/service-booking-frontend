@@ -1,0 +1,77 @@
+<div class="p-6">
+
+  <h2 class="text-xl font-semibold mb-4">My Bookings</h2>
+
+  <!-- FILTER TABS -->
+  <div class="flex gap-4 mb-6">
+    <button
+      class="px-4 py-2 rounded"
+      [class.bg-[#5cbdb9]]="selectedTab === 'ACTIVE'"
+      (click)="switchTab('ACTIVE')"
+    >
+      Active
+    </button>
+
+    <button
+      class="px-4 py-2 rounded"
+      [class.bg-[#5cbdb9]]="selectedTab === 'HISTORY'"
+      (click)="switchTab('HISTORY')"
+    >
+      History
+    </button>
+  </div>
+
+  <!-- ERROR -->
+  <p *ngIf="errorMessage" class="text-red-600 mb-3">
+    {{ errorMessage }}
+  </p>
+
+  <!-- BOOKINGS -->
+  <div *ngFor="let booking of filteredBookings"
+       class="bg-[#fbe3e8] p-4 rounded mb-3">
+
+    <p><b>Service:</b> {{ booking.serviceName }}</p>
+    <p><b>Service Provider name:</b> {{ booking.providerName }}</p>
+    <p><b>Time:</b> {{ booking.scheduledTime }}</p>
+    <p><b>Status:</b> {{ booking.status }}</p>
+
+    <!-- CANCEL ONLY FOR ACTIVE -->
+    <button
+      *ngIf="selectedTab === 'ACTIVE'"
+      class="mt-2 bg-red-500 text-white px-3 py-1 rounded"
+      (click)="cancelBooking(booking.id)">
+      Cancel
+    </button>
+
+  </div>
+  <div class="flex items-center justify-between m-6">
+
+  <button
+    class="px-3 py-1 rounded bg-gray-200"
+    [disabled]="currentPage === 0"
+    (click)="currentPage = currentPage - 1; loadBookings()"
+  >
+    Prev
+  </button>
+
+  <span class="text-sm">
+    Page {{ currentPage + 1 }} of {{ totalPages }}
+  </span>
+
+  <button
+    class="px-3 py-1 rounded bg-gray-200"
+    [disabled]="currentPage + 1 === totalPages"
+    (click)="currentPage = currentPage + 1; loadBookings()"
+  >
+    Next
+  </button>
+
+</div>
+
+
+  <p *ngIf="filteredBookings.length === 0"
+     class="text-gray-600">
+    No bookings found.
+  </p>
+
+</div>

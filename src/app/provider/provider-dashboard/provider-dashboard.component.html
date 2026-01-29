@@ -1,0 +1,100 @@
+<div class="p-6 min-h-[95vh] flex flex-col">
+
+  <h2 class="text-xl font-semibold mb-4">My Jobs</h2>
+
+  <!-- TABS -->
+  <div class="flex gap-4 mb-6">
+    <button
+      class="px-4 py-2 rounded"
+      [class.bg-[#5cbdb9]]="selectedTab === 'ACTIVE'"
+      (click)="switchTab('ACTIVE')">
+      Active
+    </button>
+
+    <button
+      class="px-4 py-2 rounded"
+      [class.bg-[#5cbdb9]]="selectedTab === 'HISTORY'"
+      (click)="switchTab('HISTORY')">
+      History
+    </button>
+  </div>
+
+  <!-- ERROR -->
+  <p *ngIf="errorMessage" class="text-red-600 mb-3">
+    {{ errorMessage }}
+  </p>
+
+  <!-- LIST -->
+  <div class="flex-1">
+
+    <p *ngIf="filteredBookings.length === 0"
+       class="text-gray-500 text-sm">
+      No bookings found.
+    </p>
+
+    <div *ngFor="let booking of filteredBookings"
+         class="bg-[#fbe3e8] p-4 rounded-lg mb-3">
+
+      <p><b>Service:</b> {{ booking.serviceName }}</p>
+      <p><b>Customer:</b> {{ booking.userName }}</p>
+      <p><b>Time:</b> {{ booking.scheduledTime }}</p>
+
+      <!-- STATUS BADGE -->
+      <span
+        class="px-2 py-1 rounded text-xs font-medium"
+        [ngClass]="{
+          'bg-yellow-200 text-yellow-800': booking.status === 'REQUESTED',
+          'bg-blue-200 text-blue-800': booking.status === 'ACCEPTED',
+          'bg-green-200 text-green-800': booking.status === 'COMPLETED',
+          'bg-gray-200 text-gray-700': booking.status === 'CANCELLED'
+        }">
+        {{ booking.status }}
+      </span>
+
+      <!-- ACTIONS -->
+      <div class="mt-3 flex gap-2">
+
+        <button *ngIf="booking.status === 'REQUESTED'"
+                class="bg-[#5cbdb9] text-white px-3 py-1 rounded"
+                (click)="accept(booking.id)">
+          Accept
+        </button>
+
+        <button *ngIf="booking.status === 'ACCEPTED'"
+                class="bg-green-600 text-white px-3 py-1 rounded"
+                (click)="complete(booking.id)">
+          Complete
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+   <div class="flex items-center justify-between m-6 mt-89">
+
+  <button
+    class="px-3 py-1 rounded bg-gray-200"
+    [disabled]="currentPage === 0"
+    (click)="currentPage = currentPage - 1; loadBookings()"
+  >
+    Prev
+  </button>
+
+  <span class="text-sm">
+    Page {{ currentPage + 1 }} of {{ totalPages }}
+  </span>
+
+  <button
+    class="px-3 py-1 rounded bg-gray-200"
+    [disabled]="currentPage + 1 === totalPages"
+    (click)="currentPage = currentPage + 1; loadBookings()"
+  >
+    Next
+  </button>
+
+</div>
+
+
+ 
+</div>
