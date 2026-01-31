@@ -11,12 +11,19 @@ import { environment } from '../../../environments/environments';
 })
 export class BookingService {
  private readonly API_URL = `${environment.apiUrl}/api/bookings`;
+ private idempotencyKey: string | null = null;
 
   constructor(private http: HttpClient) {}
 
   createBooking(request: BookingRequest): Observable<ApiResponse<any>> {
-    const idempotencyKey=crypto.randomUUID();
-    return this.http.post<ApiResponse<any>>(this.API_URL, request,{headers:{'idempotencyKey':idempotencyKey}});
+    if (!this.idempotencyKey) {
+      this.idempotencyKey = crypto.randomUUID();
+    }
+    return this.http.post<ApiResponse<any>>(this.API_URL, request,{headers:{'idempotencyKey':this.idempotencyKey}});
+  }
+
+  resetIdempotencyKey() {
+    this.idempotencyKey = null;
   }
 
   cancelBooking(bookingId: string) {

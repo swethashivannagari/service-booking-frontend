@@ -78,6 +78,7 @@ totalPages = 0;
       scheduledTime
     }).subscribe({
       next: () => {
+        this.bookingService.resetIdempotencyKey();
         alert("Booking requested successfully");
         this.selectedService = null;
         this.scheduledTime = '';
