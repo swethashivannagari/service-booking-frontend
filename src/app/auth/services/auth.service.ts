@@ -4,6 +4,7 @@ import { LoginRequest } from '../models/login-request.model';
 import { Observable } from 'rxjs';
 import { LoginResponse } from '../models/login-response.model';
 import { ApiResponse } from '../../shared/models/api-response.model';
+import { RegisterRequest } from '../../shared/models/register.model';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,13 @@ export class AuthService {
 
   login(request:LoginRequest):Observable<ApiResponse<LoginResponse>>{
     return this.http.post<ApiResponse<LoginResponse>>(`${this.API_URL}/login`,request);
+  }
+
+  register(request: RegisterRequest) {
+    return this.http.post<any>(
+      `${this.API_URL}/register`,
+      request
+    );
   }
 
   storeAuthData(response: LoginResponse): void {
